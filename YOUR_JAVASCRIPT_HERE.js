@@ -9,6 +9,9 @@ const hero = {
         damage: 2
     }    
 };
+//assign css class to all img's elements
+const imgs = document.querySelectorAll('img');
+imgs.forEach(img => img.classList.add('imgCss'));
 
 function rest(obj) {
     if (obj.health < 10) {
@@ -29,38 +32,52 @@ function equipWeapon(obj) {
     }
 }
 //hero img end reseting health funcionality
-const heroImg = document.createElement('img');
-heroImg.id = 'inn';
-document.body.appendChild(heroImg);
-heroImg.innerText = hero.name;
-heroImg.style.width = '100px';
-heroImg.style.height = '100px';
-heroImg.style.border = '2px solid green';
-
+const heroImg = document.querySelector('#inn');
 heroImg.onclick =  function() {
     hero.health = 10;
+    displayStats(hero.health);
+}
+//enemy, when clicked, the hero's health scores goes down
+const enemy = document.querySelector('#enemy');
+enemy.onclick = function() {
+    hero.health -= 1;
+    displayStats();
 }
 
-//weapon img and picking new weapon functionality
-const weaponImg = document.createElement('img');
-weaponImg.id = 'dagger';
-document.body.appendChild(weaponImg);
-weaponImg.style.border = '2px solid green';
-weaponImg.style.width = '100px';
-weaponImg.style.height = '100px';
+const weaponImg = document.querySelector('#dagger');
+weaponImg.onclick = function(e) {
+    pickUpItem(hero, {'type': 'dagger', 'damage': 2});
+    displayStats();
+    weaponImg.style.display = 'none';
 
-weaponImg.onclick = function() {
-    pickUpItem(hero, {'type': 'dagger', 'damage': 2})
+    //clicking on bag is possible only if a weapon is clicked
+    bagImg.onclick = function() {
+        hero.weapon = hero.inventory[0];
+        displayStats();
+    }
 }
 
-//bag img and filling bag with first weapon found in inventory
-const bagImg = document.createElement('img');
-bagImg.id = 'bag';
-document.body.appendChild(bagImg);
-bagImg.style.border = '2px solid green';
-bagImg.style.width = '100px';
-bagImg.style.height = '100px';
+const bagImg = document.querySelector('#bag');
 
-bagImg.onclick = function() {
-    hero.weapon = hero.inventory[0];
+// const stats = document.querySelector('ul');
+
+function displayStats() {
+    const lis = document.querySelectorAll('li');
+    lis[0].innerHTML = "name: "+hero.name;
+    lis[1].innerHTML = 'healt: '+hero.health;
+    lis[2].innerHTML = "weapon damage: " + hero.weapon.damage;
+    lis[3].innerHTML = 'weapon type : '+ hero.weapon.type; 
 }
+
+document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const newName = document.querySelector('form input');
+    if (newName.value == '') {
+        alert('name can\'t be empty')
+    } else {
+        hero.name = newName.value;
+        newName.value = '';
+        displayStats();
+    }
+})
+displayStats();

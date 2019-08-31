@@ -324,3 +324,16 @@ body {
     position: absolute;
   }
 }
+
+.imgContainer {
+  width: 70%;
+  margin: auto;
+}
+
+.imgCss {
+  margin:auto;
+  max-width: 200px;
+  max-height: 200px;
+  border: '2px solid green';
+  text-align: center;
+}
